@@ -41,7 +41,12 @@
           readfile($features_path . '/' . $file);
       }
 ?>
-        var c='<?php print $key;?>='+JSON.stringify(Modernizr);
+        var c='<?php print $key;?>=';
+        if(navigator.appName == 'Opera') {
+            c += escape(JSON.stringify(Modernizr));
+        } else {
+            c += JSON.stringify(Modernizr);
+        }
         try{
             document.cookie=c;
         }catch(e){}
