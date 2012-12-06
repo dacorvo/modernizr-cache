@@ -1,8 +1,57 @@
 <html>
 <head>
+<style>
+li {
+    display: inline-table;
+    padding-right: 8px;
+    color :  red;
+}
+li.top {
+    color :  black;
+    display: list-item;
+}
+li.yes {
+    color :  green;
+}
+</style>
+<script type='text/javascript'>
+    var start = new Date().getTime();
+    window.addEventListener('load',function pageLoaded(evt) {
+        var now = new Date().getTime();
+        document.getElementById('time').innerHTML = (now - start) + ' ms';
+        document.getElementById('dump').innerHTML = dumpModernizr();
+    },
+    false);
+
+function dumpModernizr(){
+  var str = '';
+
+    for (var prop in Modernizr) {
+
+      if (typeof Modernizr[prop] === 'function') continue;
+      
+      if (prop[0] === '_') continue;
+
+      if (typeof Modernizr[prop] === 'object') {
+        str += '<li class="top"><b>'+prop+'{}</b><ul>';
+        for (var field in Modernizr[prop]) {
+          str += '<li class="' + (Modernizr[prop][field] ? 'yes' : '') + '">' + field + '</li>';
+        }
+        str += '</ul></li>';
+      } else {
+        str += '<li  id="'+prop+'" class="' + (Modernizr[prop] ? 'yes' : '') + '">' + prop + '</li>';
+      }
+  }
+  return str;
+}
+</script>
 <script type='text/javascript' src="./modernizr-cache.php"></script>
 </head>
-<body onload="alert(Modernizr['csstransitions']);">
-    <p>This page will only test for Modernizr features the first time it is loaded</p>
+<body>
+    <p>This page tests for all features <a href="http://www.modernizr.com">Modernizr</a>
+     can detect and caches the result in a session cookie, thus reducing page loading time.</p>
+    <p>You can verify it by reloading the page.</p>
+    <p>Loading time: <span id="time"></span></p>
+    <p id="dump"></p>
 </body>
 </html>
